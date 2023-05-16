@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-puts ARGC[0].scan(/School/).json
+puts ARGV[0].scan(/School/).join
