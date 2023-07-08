@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
-# Check the record
-if [ $# -eq 1 ]; then
-    for sub in www lb-01 web-01 web-02; do
-	name="$(dig "$sub"."$1" | grep -A1 'ANSWER SECTION:' | tail -1 | awk '{print $4}')"
-	ip="$(dig "$sub"."$1" | grep -A1 'ANSWER SECTION:' | tail -1 | awk '{print $5}')"
-	echo "The subdomain $sub is a $name record and points to $ip"
-    done
-elif [ $# -eq 2 ]; then
-    name="$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tail -1 | awk '{print $4}')"
-    ip="$(dig "$2"."$1" | grep -A1 'ANSWER SECTION:' | tail -1 | awk '{print $5}')"
-    echo "The subdomain $2 is a $name record and points to $ip"
+# Usage: ./1-world_wide_web <domain> <subdomain>
+# Display information about subdomains.
+
+domain="$1"
+subdomain="$2"
+
+# Default subdomains to audit
+subdomains=("www" "lb-01" "web-01" "web-02")
+
+if [[ ! -z $subdomain ]]; then
+  subdomains=($subdomain)
 fi
+
+for sub in "${subdomains[@]}"; do
+  dig_output=$(dig +short A "$sub.$domain")
+  if [[ -n "$dig_output" ]]; then
+    echo "The subdomain $sub is a A record and points to $dig_output"
+  else
+    echo "The subdomain $sub does not have an A record"
+  fi
+done
