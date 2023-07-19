@@ -1,6 +1,23 @@
 #!/usr/bin/env bash
-# bash script to install nginx and set up custom headers
-apt-get -y update
-apt-get -y install nginx
-sudo sed -i "29i \\\tadd_header X-Served-By $HOSTNAME;\n" /etc/nginx/sites-available/default
-service nginx restart
+#Installs and sets up HAproxy Load Balancer to balance load on server
+
+sudo apt -y update
+sudo apt install -y haproxy
+sudo chmod 777 /etc/haproxy/haproxy.cfg
+echo "frontend http
+        bind *:80
+        mode http
+        timeout client 5000
+        default_backend web-backend
+    backend web-backend
+        balance roundrobin
+        mode http
+        server 210782-web-01 18.234.80.252:80 check
+        server 210782-web-02 100.26.254.219:80 check
+        timeout connect 5000
+        timeout server 10000
+
+" >> /etc/haproxy/haproxy.cfg
+sudo chmod 644 /etc/haproxy/haproxy.cfg
+
+sudo service haproxy restart
