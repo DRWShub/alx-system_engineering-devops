@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Script configures web-01 to block all incoming traffic except
-# ports 22, 443 and 80
+#+ ports 22, 443 and 80
 
 sudo apt-get install ufw
 sed -i 's/IPV6=.*/IPV6=yes/' /etc/default/ufw
