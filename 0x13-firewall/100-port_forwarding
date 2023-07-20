@@ -10,7 +10,8 @@ fi
 # Check if iptables is installed
 if ! command -v iptables &>/dev/null; then
     echo "iptables is not installed. Please install it before running this script."
-    exit 1
+    sudo apt update
+    sudo apt install iptables
 fi
 
 # Clear existing rules
