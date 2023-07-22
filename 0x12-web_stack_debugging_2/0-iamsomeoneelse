@@ -1,1 +1,1 @@
-sudo -u USERNAME whoami
+sudo -u "$SUDO_USER" whoami
